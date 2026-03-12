@@ -1,25 +1,17 @@
-## Multi-stage build (Maven -> lightweight runtime)
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Cache Maven deps first
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
+
+RUN chmod +x mvnw
 RUN ./mvnw -q -DskipTests dependency:go-offline
 
-# Build
-COPY src/ src/
-RUN ./mvnw -q -DskipTests clean package
+COPY src ./src
 
-FROM eclipse-temurin:21-jre
+RUN ./mvnw -q -DskipTests package
 
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar /app/app.jar
-
-ENV SERVER_PORT=8080
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
-
+CMD ["java","-jar","target/*.jar"]
