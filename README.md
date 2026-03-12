@@ -53,7 +53,19 @@ The application will start on `http://localhost:8080`.
 ### 1. Prerequisites
 - Docker Desktop (with Docker Compose)
 
-### 2. Start the stack
+### 2. Configure Aiven MySQL via `.env`
+
+Create a `.env` file in the project root (same folder as `docker-compose.yml`) with your **Aiven MySQL** credentials (I will not hard-code them here; you can paste them later), for example:
+
+```env
+SPRING_DATASOURCE_URL=jdbc:mysql://<AIVEN_HOST>:<PORT>/<DB_NAME>?ssl-mode=REQUIRED
+SPRING_DATASOURCE_USERNAME=<AIVEN_USER>
+SPRING_DATASOURCE_PASSWORD=<AIVEN_PASSWORD>
+```
+
+> These variables are picked up by Docker Compose and forwarded into the Spring Boot container, and `application.properties` is already configured to read them.
+
+### 3. Start the stack
 From the project root:
 
 ```bash
@@ -61,17 +73,9 @@ docker compose up --build
 ```
 
 This starts:
-- **MySQL** inside Docker (not exposed on host by default; data persisted in a named volume)
-- **Spring Boot API** on `http://localhost:8081` (mapped to container port 8080 to avoid conflicts with a local Tomcat already using 8080)
+- **Spring Boot API** on `http://localhost:8081` (mapped to container port 8080 to avoid conflicts with a local Tomcat already using 8080), connected to your **Aiven MySQL** instance using the `.env` variables.
 
-The database schema is initialized automatically from `schema.sql` on the first run.
-
-If you need to connect to MySQL from your host machine, you can publish a port by adding to `db` in `docker-compose.yml`:
-
-```yml
-ports:
-  - "3307:3306"
-```
+> Note: Since the database is now hosted on Aiven, you should apply `schema.sql` to that Aiven database manually (via MySQL client, Aiven console, or a migration tool).
 
 ### 3. Stop
 
