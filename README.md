@@ -34,7 +34,7 @@ CREATE DATABASE IF NOT EXISTS ecommerce_db;
 ```
 
 ### 3. Application Properties
-Update the database credentials in `src/main/resources/application.properties` if your MySQL username/password is different from `root`/`root`.
+Update the database credentials in `src/main/resources/application.properties` if your MySQL username/password is different from `root`/`sudeep2003`.
 ```properties
 spring.datasource.username=YOUR_USERNAME
 spring.datasource.password=YOUR_PASSWORD
@@ -47,6 +47,43 @@ spring.datasource.password=YOUR_PASSWORD
 ```
 
 The application will start on `http://localhost:8080`.
+
+## 🐳 Run with Docker (recommended)
+
+### 1. Prerequisites
+- Docker Desktop (with Docker Compose)
+
+### 2. Start the stack
+From the project root:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+- **MySQL** inside Docker (not exposed on host by default; data persisted in a named volume)
+- **Spring Boot API** on `http://localhost:8081` (mapped to container port 8080 to avoid conflicts with a local Tomcat already using 8080)
+
+The database schema is initialized automatically from `schema.sql` on the first run.
+
+If you need to connect to MySQL from your host machine, you can publish a port by adding to `db` in `docker-compose.yml`:
+
+```yml
+ports:
+  - "3307:3306"
+```
+
+### 3. Stop
+
+```bash
+docker compose down
+```
+
+To also delete the database volume (full reset):
+
+```bash
+docker compose down -v
+```
 
 ## 📚 API Documentation
 Once the application is running, you can access the Swagger UI for testing all REST APIs directly from the browser:
