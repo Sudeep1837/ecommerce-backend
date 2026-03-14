@@ -94,7 +94,7 @@ public class OrderService {
             cartRepository.save(cart);
             log.info("Cart cleared for userId={} cartId={}", user.getId(), cart.getId());
 
-            // Send confirmation email
+            // Send confirmation email (best-effort)
             emailService.sendOrderConfirmation(user, savedOrder);
         }
 
