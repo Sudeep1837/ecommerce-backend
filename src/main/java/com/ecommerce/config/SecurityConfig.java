@@ -75,7 +75,8 @@ public class SecurityConfig {
             java.util.List.of(
                     "http://localhost:8080",
                     "http://localhost:8081",
-                    "http://localhost:5173"
+                    "http://localhost:5173",
+                    "https://ecommerce-backend-2-tu2o.onrender.com"
             )
     );
 
