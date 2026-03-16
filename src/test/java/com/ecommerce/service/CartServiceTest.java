@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.dto.CartDto;
 import com.ecommerce.entity.*;
+import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.repository.CartRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.UserRepository;
@@ -47,6 +48,44 @@ class CartServiceTest {
     }
 
     @Test
+    void getCart_shouldReturnDto_whenUserHasCart() {
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findByUserId(user.getId())).thenReturn(Optional.of(cart));
+
+        CartDto result = cartService.getCart(user.getEmail());
+
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getUserId()).isEqualTo(1L);
+        assertThat(result.getTotalPrice()).isEqualTo(0.0);
+    }
+
+    @Test
+    void getCart_shouldCreateCartAndReturnDto_whenUserHasNoCart() {
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findByUserId(user.getId())).thenReturn(Optional.empty());
+        when(cartRepository.save(any(Cart.class))).thenAnswer(inv -> {
+            Cart c = inv.getArgument(0);
+            c.setId(2L);
+            return c;
+        });
+
+        CartDto result = cartService.getCart(user.getEmail());
+
+        assertThat(result).isNotNull();
+        verify(cartRepository).save(any(Cart.class));
+    }
+
+    @Test
+    void getCart_shouldThrow_whenUserNotFound() {
+        when(userRepository.findByEmail("missing@example.com")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> cartService.getCart("missing@example.com"))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("User not found");
+    }
+
+    @Test
     void addToCart_shouldAddNewItem_whenEnoughStock() {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
@@ -67,7 +106,7 @@ class CartServiceTest {
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
         assertThatThrownBy(() -> cartService.addToCart(user.getEmail(), product.getId(), 2))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(com.ecommerce.exception.BadRequestException.class)
                 .hasMessageContaining("Not enough stock available");
     }
 
@@ -90,7 +129,7 @@ class CartServiceTest {
         when(cartRepository.findByUserId(user.getId())).thenReturn(Optional.of(cart));
 
         assertThatThrownBy(() -> cartService.updateCartItem(user.getEmail(), product.getId(), 1))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Product not found in cart");
     }
 

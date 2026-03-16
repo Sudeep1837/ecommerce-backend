@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.dto.OrderDto;
 import com.ecommerce.entity.*;
+import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.repository.CartRepository;
 import com.ecommerce.repository.OrderRepository;
 import com.ecommerce.repository.ProductRepository;
@@ -16,9 +17,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -135,6 +138,97 @@ class OrderServiceTest {
         assertThat(result.getOrderStatus()).isEqualTo(OrderStatus.CANCELLED);
         verify(productRepository, never()).save(any());
         verify(emailService, never()).sendOrderConfirmation(any(), any());
+    }
+
+    @Test
+    void getUserOrders_shouldReturnOrderDtos() {
+        Order order = Order.builder()
+                .id(1L)
+                .user(user)
+                .totalAmount(100.0)
+                .orderDate(LocalDateTime.now())
+                .orderStatus(OrderStatus.PLACED)
+                .items(new ArrayList<>())
+                .build();
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(orderRepository.findByUserId(user.getId())).thenReturn(List.of(order));
+
+        List<OrderDto> result = orderService.getUserOrders(user.getEmail());
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getId()).isEqualTo(1L);
+        assertThat(result.get(0).getTotalAmount()).isEqualTo(100.0);
+    }
+
+    @Test
+    void getUserOrders_shouldThrow_whenUserNotFound() {
+        when(userRepository.findByEmail("missing@example.com")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> orderService.getUserOrders("missing@example.com"))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("User not found");
+    }
+
+    @Test
+    void getOrderById_shouldReturnOrderDto() {
+        Order order = Order.builder()
+                .id(1L)
+                .user(user)
+                .totalAmount(100.0)
+                .orderDate(LocalDateTime.now())
+                .orderStatus(OrderStatus.PLACED)
+                .items(new ArrayList<>())
+                .build();
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+
+        OrderDto result = orderService.getOrderById(1L);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getTotalAmount()).isEqualTo(100.0);
+    }
+
+    @Test
+    void getOrderById_shouldThrow_whenOrderNotFound() {
+        when(orderRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> orderService.getOrderById(999L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Order not found");
+    }
+
+    @Test
+    void updateOrderStatus_shouldUpdateAndReturnDto() {
+        Order order = Order.builder()
+                .id(1L)
+                .user(user)
+                .totalAmount(100.0)
+                .orderDate(LocalDateTime.now())
+                .orderStatus(OrderStatus.PLACED)
+                .items(new ArrayList<>())
+                .build();
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any(Order.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        OrderDto result = orderService.updateOrderStatus(1L, "SHIPPED");
+
+        assertThat(result.getOrderStatus()).isEqualTo(OrderStatus.SHIPPED);
+        verify(orderRepository).save(order);
+    }
+
+    @Test
+    void updateOrderStatus_shouldThrow_whenInvalidStatus() {
+        Order order = Order.builder()
+                .id(1L)
+                .user(user)
+                .orderStatus(OrderStatus.PLACED)
+                .items(new ArrayList<>())
+                .build();
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+
+        assertThatThrownBy(() -> orderService.updateOrderStatus(1L, "INVALID_STATUS"))
+                .isInstanceOf(com.ecommerce.exception.BadRequestException.class)
+                .hasMessageContaining("Invalid order status");
     }
 }
 

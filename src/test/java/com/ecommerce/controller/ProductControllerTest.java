@@ -61,5 +61,39 @@ class ProductControllerTest {
 
         verify(productService).getAllProducts(0, 10, "id", "asc", null, null);
     }
+
+    @Test
+    void getProductById_shouldReturnOk() throws Exception {
+        ProductDto dto = new ProductDto();
+        dto.setId(1L);
+        when(productService.getProductById(1L)).thenReturn(dto);
+
+        mockMvc.perform(get("/api/products/1"))
+                .andExpect(status().isOk());
+
+        verify(productService).getProductById(1L);
+    }
+
+    @Test
+    void updateProduct_shouldReturnOk() throws Exception {
+        ProductDto dto = new ProductDto();
+        dto.setName("Updated");
+        when(productService.updateProduct(eq(1L), any(ProductDto.class))).thenReturn(dto);
+
+        mockMvc.perform(put("/api/products/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Updated\",\"price\":20,\"stock\":10,\"category\":\"cat\"}"))
+                .andExpect(status().isOk());
+
+        verify(productService).updateProduct(eq(1L), any(ProductDto.class));
+    }
+
+    @Test
+    void deleteProduct_shouldReturnOk() throws Exception {
+        mockMvc.perform(delete("/api/products/1"))
+                .andExpect(status().isOk());
+
+        verify(productService).deleteProduct(1L);
+    }
 }
 

@@ -62,5 +62,27 @@ class CartControllerTest {
 
         verify(cartService).addToCart("john@example.com", 1L, 2);
     }
+
+    @Test
+    void updateCartItem_shouldReturnOk() throws Exception {
+        when(cartService.updateCartItem(any(), eq(1L), eq(3))).thenReturn(new CartDto());
+
+        mockMvc.perform(put("/api/cart/update/1")
+                        .principal(authentication)
+                        .param("quantity", "3"))
+                .andExpect(status().isOk());
+
+        verify(cartService).updateCartItem("john@example.com", 1L, 3);
+    }
+
+    @Test
+    void removeFromCart_shouldReturnOk() throws Exception {
+        when(cartService.removeFromCart(any(), eq(1L))).thenReturn(new CartDto());
+
+        mockMvc.perform(delete("/api/cart/remove/1").principal(authentication))
+                .andExpect(status().isOk());
+
+        verify(cartService).removeFromCart("john@example.com", 1L);
+    }
 }
 
