@@ -8,6 +8,7 @@ The system follows modern backend engineering practices including:
 * **RESTful API Design**
 * **JWT-based Authentication**
 * **Secure Role-Based Authorization**
+* **Email Notification Service**
 * **Cloud Deployment**
 * **Dockerized Environment**
 * **Automated Test Coverage using JaCoCo**
@@ -134,6 +135,27 @@ This structure allows future integration with real payment gateways like:
 
 ---
 
+## 📧 Email Notification Service
+
+The application includes an **email notification system** to improve communication with users.
+
+Automated emails are triggered for important events such as:
+
+* User registration confirmation
+* Order placement confirmation
+* Payment confirmation
+* Order status updates
+
+The email service is implemented using **Spring Boot Mail (JavaMailSender)** and runs asynchronously to ensure it **does not affect API response time**.
+
+Benefits include:
+
+* Improved user experience
+* Real-time transaction notifications
+* Better communication between the platform and customers
+
+---
+
 # 🏗️ Technology Stack
 
 | Layer             | Technology                  |
@@ -145,6 +167,7 @@ This structure allows future integration with real payment gateways like:
 | ORM               | Spring Data JPA / Hibernate |
 | Security          | Spring Security + JWT       |
 | API Documentation | Swagger (OpenAPI 3)         |
+| Email Service     | Spring Boot Mail (JavaMailSender) |
 | Object Mapping    | ModelMapper                 |
 | Testing           | JUnit                       |
 | Code Coverage     | JaCoCo                      |
@@ -165,6 +188,7 @@ entity      → JPA entity models
 dto         → Request & response objects
 security    → JWT authentication filters
 config      → Spring configuration
+email       → Email notification service
 ```
 
 ### Architectural Benefits
@@ -198,6 +222,9 @@ src/main/java
 │
 ├── security
 │   └── JWT authentication filters
+│
+├── email
+│   └── Email notification service
 │
 └── config
     └── Application configuration
@@ -321,9 +348,11 @@ SPRING_DATASOURCE_URL
 SPRING_DATASOURCE_USERNAME
 SPRING_DATASOURCE_PASSWORD
 JWT_SECRET
+MAIL_USERNAME
+MAIL_PASSWORD
 ```
 
-These variables allow the application to connect to the **cloud database securely**.
+These variables allow the application to connect to the **cloud database and email service securely**.
 
 ---
 
@@ -363,6 +392,7 @@ This repository includes:
 * Postman API collection
 * ER Diagram
 * JaCoCo coverage report
+* Email notification service
 
 ---
 
@@ -373,6 +403,7 @@ This project demonstrates:
 * Designing **scalable REST APIs**
 * Implementing **JWT authentication**
 * Building **secure Spring Boot applications**
+* Integrating **email notification services**
 * Managing relational databases using **JPA**
 * Deploying backend services on **cloud platforms**
 * Monitoring code quality with **JaCoCo coverage**
