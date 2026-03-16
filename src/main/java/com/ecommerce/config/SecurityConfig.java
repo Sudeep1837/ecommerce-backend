@@ -76,7 +76,8 @@ public class SecurityConfig {
                     "http://localhost:8080",
                     "http://localhost:8081",
                     "http://localhost:5173",
-                    "https://ecommerce-backend-2-tu2o.onrender.com"
+                    "https://ecommerce-backend-2-tu2o.onrender.com",
+                    "https://harmony-shop-main.vercel.app"
             )
     );
 
