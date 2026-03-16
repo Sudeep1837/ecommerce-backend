@@ -1,103 +1,244 @@
-# E-Commerce Backend System
+# 🛒 E-Commerce Backend System
 
-A production-grade scalable backend system for an e-commerce platform built using Java 21, Spring Boot 3, and MySQL. It demonstrates professional backend development practices including a layered architecture, security, API documentation, and clean code.
+A **production-grade scalable backend system** for an e-commerce platform built using **Java 21, Spring Boot 3, and MySQL**.
 
-## 🚀 Features
-- **User Management**: Registration, Login (JWT), Profile Update, Admin Controls.
-- **Product Management**: CRUD APIs for products with filtering and pagination.
-- **Cart Management**: Add, update, remove items, calculate totals.
-- **Order Management**: Checkout flow, status updates, history.
-- **Inventory Management**: Auto stock deduction upon successful checkout.
-- **Payment Management**: Simulated payment gateway processing.
+This project demonstrates **professional backend development practices** including:
 
-## 🏗️ Technical Stack
-- **Language**: Java 21
-- **Framework**: Spring Boot 3+
-- **Database**: MySQL
-- **ORM**: Spring Data JPA / Hibernate
-- **Security**: Spring Security + JWT
-- **Documentation**: Swagger UI (OpenAPI 3)
-- **Mapping**: ModelMapper
+- Layered Architecture
+- Secure Authentication using JWT
+- RESTful API Design
+- API Documentation using Swagger
+- Containerized Deployment with Docker
+- Cloud Database Integration (Aiven MySQL)
 
-## 🛠️ How to run locally
+---
 
-### 1. Prerequisites
+# 🚀 Features
+
+### 👤 User Management
+- User Registration
+- Secure Login using **JWT Authentication**
+- Profile update functionality
+- Role-based access (**ADMIN / CUSTOMER**)
+- Admin can manage users
+
+### 📦 Product Management
+- Create, update, and delete products (Admin)
+- Product listing with filtering
+- Pagination support
+
+### 🛒 Cart Management
+- Add items to cart
+- Update item quantity
+- Remove items from cart
+- Automatic cart total calculation
+
+### 📑 Order Management
+- Checkout workflow
+- Order history tracking
+- Order status updates
+
+### 📉 Inventory Management
+- Automatic stock deduction after successful checkout
+
+### 💳 Payment Management
+- Simulated payment gateway processing
+
+---
+
+# 🏗️ Technical Stack
+
+| Layer | Technology |
+|------|-------------|
+| Language | Java 21 |
+| Framework | Spring Boot 3+ |
+| Database | MySQL |
+| ORM | Spring Data JPA / Hibernate |
+| Security | Spring Security + JWT |
+| Documentation | Swagger UI (OpenAPI 3) |
+| Mapping | ModelMapper |
+| Deployment | Docker + Render |
+| Cloud Database | Aiven MySQL |
+
+---
+
+# 🧱 Project Architecture
+
+```
+controller  → REST API endpoints
+service     → Business logic layer
+repository  → Data access layer
+entity      → Database models
+dto         → Request / Response models
+config      → Security & application configuration
+```
+
+This **layered architecture ensures scalability, maintainability, and separation of concerns.**
+
+---
+
+# 🌐 Live API Documentation
+
+The application is deployed on **Render**.
+
+You can access the **Swagger UI** here:
+
+👉 **https://ecommerce-backend-2-tu2o.onrender.com/swagger-ui/index.html**
+
+Swagger allows you to:
+
+- Explore all available APIs
+- Test endpoints directly from the browser
+- Authenticate using JWT tokens
+
+---
+
+# 🔐 Authentication (Using Swagger)
+
+1. Register or login using the endpoint:
+
+```
+POST /api/users/login
+```
+
+2. Copy the returned **JWT token**
+
+3. Click the **Authorize** button in Swagger
+
+4. Paste the token like this:
+
+```
+Bearer <your_token>
+```
+
+---
+
+# 🛠️ Running Locally (Optional)
+
+### 1️⃣ Prerequisites
+
+Make sure the following are installed:
+
 - Java 21+
 - Maven 3.8+
-- MySQL Server (Running on port 3306)
+- MySQL Server
 
-### 2. Database Setup
-1. Open your MySQL client.
-2. Run the provided `schema.sql` (or just create the database).
+---
+
+### 2️⃣ Database Setup
+
+Create the database:
+
 ```sql
 CREATE DATABASE IF NOT EXISTS ecommerce_db;
 ```
 
-### 3. Application Properties
-Update the database credentials in `src/main/resources/application.properties` if your MySQL username/password is different from `root`/`sudeep2003`.
-```properties
+Then run the provided:
+
+```
+schema.sql
+```
+
+---
+
+### 3️⃣ Update Database Credentials
+
+Update `application.properties` if your MySQL credentials differ.
+
+```
 spring.datasource.username=YOUR_USERNAME
 spring.datasource.password=YOUR_PASSWORD
 ```
 
-### 4. Build and Run
-```bash
+---
+
+### 4️⃣ Build and Run
+
+```
 ./mvnw clean install
 ./mvnw spring-boot:run
 ```
 
-The application will start on `http://localhost:8080`.
+The application will start on:
 
-## 🐳 Run with Docker (recommended)
+```
+http://localhost:8080
+```
 
-### 1. Prerequisites
-- Docker Desktop (with Docker Compose)
+---
 
-### 2. Configure Aiven MySQL via `.env`
+# 🐳 Running with Docker
 
-Create a `.env` file in the project root (same folder as `docker-compose.yml`) with your **Aiven MySQL** credentials (I will not hard-code them here; you can paste them later), for example:
+### Prerequisites
 
-```env
+- Docker Desktop
+- Docker Compose
+
+---
+
+### Configure Aiven MySQL
+
+Create a `.env` file in the project root.
+
+Example:
+
+```
 SPRING_DATASOURCE_URL=jdbc:mysql://<AIVEN_HOST>:<PORT>/<DB_NAME>?ssl-mode=REQUIRED
 SPRING_DATASOURCE_USERNAME=<AIVEN_USER>
 SPRING_DATASOURCE_PASSWORD=<AIVEN_PASSWORD>
 ```
 
-> These variables are picked up by Docker Compose and forwarded into the Spring Boot container, and `application.properties` is already configured to read them.
+---
 
-### 3. Start the stack
-From the project root:
+### Start the Application
 
-```bash
+```
 docker compose up --build
 ```
 
-This starts:
-- **Spring Boot API** on `http://localhost:8081` (mapped to container port 8080 to avoid conflicts with a local Tomcat already using 8080), connected to your **Aiven MySQL** instance using the `.env` variables.
+This will start the backend container connected to **Aiven MySQL**.
 
-> Note: Since the database is now hosted on Aiven, you should apply `schema.sql` to that Aiven database manually (via MySQL client, Aiven console, or a migration tool).
+---
 
-### 3. Stop
+### Stop the Application
 
-```bash
+```
 docker compose down
 ```
 
-To also delete the database volume (full reset):
+To fully reset containers and volumes:
 
-```bash
+```
 docker compose down -v
 ```
 
-## 📚 API Documentation
-Once the application is running, you can access the Swagger UI for testing all REST APIs directly from the browser:
-👉 **[Swagger UI](http://localhost:8080/swagger-ui/index.html)**
+---
 
-**Note**: To access secure endpoints, first register/login via `/api/users/login`, copy the JWT token, click the **Authorize** button in Swagger, and paste the token.
+# 📦 Project Deliverables
 
-## 📦 Deliverables included in this project
-1. Complete Source Code
-2. `README.md` (Project overview, instructions)
-3. `Postman_Collection.json`
-4. `schema.sql` (Database queries)
-5. `docker-compose.yml` (For easy containerization)
+This repository contains:
+
+- Complete **Spring Boot Backend Source Code**
+- `README.md` – Project documentation
+- `Postman_Collection.json` – API testing collection
+- `schema.sql` – Database schema
+- `docker-compose.yml` – Containerized deployment
+
+---
+
+# 🎯 Key Learning Outcomes
+
+This project demonstrates:
+
+- Production-ready **Spring Boot backend architecture**
+- **JWT authentication and role-based security**
+- **Cloud database integration (Aiven MySQL)**
+- **Dockerized backend deployment**
+- REST API documentation using **Swagger**
+
+---
+
+# 👨‍💻 Author
+
+**Sudeep Kumar Dehury**  
+B.Tech Computer Science Engineering
