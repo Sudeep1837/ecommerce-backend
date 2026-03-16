@@ -199,5 +199,192 @@ src/main/java
 ├── security
 │   └── JWT authentication filters
 │
-└
+└── config
+    └── Application configuration
 ```
+
+---
+
+# 🗄️ Database Design (ER Diagram)
+
+The system uses a relational schema connecting key entities:
+
+* Users
+* Products
+* Cart
+* Orders
+* Order Items
+
+<p align="center">
+  <img src="docs/images/er-diagram.png" width="800"/>
+</p>
+
+---
+
+# 🧪 Test Coverage (JaCoCo)
+
+Unit tests are implemented to ensure reliability of the core business logic.
+
+JaCoCo is integrated to generate **code coverage reports**.
+
+<p align="center">
+  <img src="docs/images/jacoco-report.png" width="800"/>
+</p>
+
+Benefits of JaCoCo:
+
+* Identify untested code
+* Improve reliability
+* Maintain high code quality
+
+---
+
+# 📚 API Documentation
+
+Swagger is integrated for API testing and documentation.
+
+### Access Swagger
+
+```
+https://ecommerce-backend-2-tu2o.onrender.com/swagger-ui/index.html
+```
+
+Swagger allows developers to:
+
+* Explore REST endpoints
+* Send API requests
+* Authenticate using JWT
+* Test responses interactively
+
+---
+
+# 🔐 Authentication Flow
+
+Authentication uses **JWT (JSON Web Tokens)**.
+
+### Login Request
+
+```
+POST /api/users/login
+```
+
+### Authentication Steps
+
+1. User sends login credentials
+2. Server validates credentials
+3. JWT token is generated
+4. Token is returned in response
+5. Client includes token in subsequent requests
+
+Example header:
+
+```
+Authorization: Bearer <token>
+```
+
+Spring Security validates the token before granting access.
+
+---
+
+# ☁️ Deployment (Render)
+
+The application is deployed using **Render cloud platform**.
+
+Deployment pipeline:
+
+```
+GitHub Repository
+        ↓
+Render Build
+        ↓
+Spring Boot Application
+        ↓
+Public API Endpoint
+```
+
+Render automatically:
+
+* Pulls code from GitHub
+* Builds the application
+* Deploys the container
+* Provides a public URL
+
+---
+
+# ⚙️ Environment Variables (Production)
+
+In Render, the following environment variables are configured:
+
+```
+SPRING_DATASOURCE_URL
+SPRING_DATASOURCE_USERNAME
+SPRING_DATASOURCE_PASSWORD
+JWT_SECRET
+```
+
+These variables allow the application to connect to the **cloud database securely**.
+
+---
+
+# 🛠️ Running Locally (Development)
+
+You can also run the project locally for development.
+
+### Prerequisites
+
+* Java 21+
+* Maven
+* MySQL
+
+### Run Application
+
+```
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+Application will start at:
+
+```
+http://localhost:8080
+```
+
+---
+
+# 📦 Repository Contents
+
+This repository includes:
+
+* Complete **Spring Boot Backend Source Code**
+* Swagger API Documentation
+* Database schema
+* Docker configuration
+* Postman API collection
+* ER Diagram
+* JaCoCo coverage report
+
+---
+
+# 🎯 Key Learning Outcomes
+
+This project demonstrates:
+
+* Designing **scalable REST APIs**
+* Implementing **JWT authentication**
+* Building **secure Spring Boot applications**
+* Managing relational databases using **JPA**
+* Deploying backend services on **cloud platforms**
+* Monitoring code quality with **JaCoCo coverage**
+
+---
+
+# 🚀 Future Improvements
+
+Possible enhancements:
+
+* Real payment gateway integration
+* Redis caching for performance
+* API rate limiting
+* Microservices architecture
+* CI/CD pipeline automation
+* Kubernetes deployment
