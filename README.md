@@ -1,238 +1,370 @@
 # 🛒 E-Commerce Backend System
 
-A **production-grade scalable REST API backend** for an e-commerce platform built using **Java 21, Spring Boot 3, and MySQL**.
+A scalable and production-ready **backend system for an e-commerce platform** built using **Java 21, Spring Boot 3, and MySQL**.
 
-The system is designed using **industry-standard backend architecture**, secure authentication, and cloud deployment.
+The system follows modern backend engineering practices including:
 
-It exposes REST APIs that can be consumed by **web, mobile, or frontend applications**.
+* **Layered Architecture**
+* **RESTful API Design**
+* **JWT-based Authentication**
+* **Secure Role-Based Authorization**
+* **Email Notification Service**
+* **Cloud Deployment**
+* **Dockerized Environment**
+* **Automated Test Coverage using JaCoCo**
+
+This project demonstrates how a **real-world e-commerce backend system** can be designed, implemented, and deployed using modern backend technologies.
 
 ---
 
-# 🌐 Live API Documentation
+# 🌍 Live Deployment
 
-The backend is deployed on **Render**.
+The backend is **deployed on Render** and accessible publicly.
 
-👉 Swagger UI  
+### 🔗 Live API Documentation
+
 https://ecommerce-backend-2-tu2o.onrender.com/swagger-ui/index.html
 
-Swagger allows you to:
+Using Swagger you can:
 
-- Explore all APIs
-- Test endpoints directly
-- Authenticate using JWT tokens
+* Explore all REST APIs
+* Send requests directly from the browser
+* Authenticate using JWT tokens
+* Test API responses
 
 ---
 
 # 🚀 Core Features
 
 ## 👤 User Management
-- User Registration
-- Login using **JWT Authentication**
-- Profile update
-- Role based access (**ADMIN / CUSTOMER**)
-- Admin can manage users
+
+Handles authentication and user administration.
+
+Capabilities include:
+
+* User registration
+* Secure login using **JWT authentication**
+* Role-based access control (**ADMIN / CUSTOMER**)
+* Profile management
+* Admin control over platform users
+
+### Security Implementation
+
+* Password encryption using **BCrypt**
+* Stateless authentication using **JWT tokens**
+* Endpoint protection using **Spring Security filters**
+* Secure request validation
 
 ---
 
 ## 📦 Product Management
-- Admin can **add, update, delete products**
-- Public product browsing
-- Pagination support
-- Category filtering
+
+Allows administrators to manage products and customers to browse available items.
+
+Features include:
+
+* Add new products
+* Update product details
+* Delete products
+* View product catalog
+* Pagination support
+* Filtering support
+
+This module enables **efficient product management for scalable e-commerce systems.**
 
 ---
 
 ## 🛒 Cart Management
-- Add products to cart
-- Update quantity
-- Remove items
-- Automatic cart total calculation
+
+The cart module enables customers to manage products before checkout.
+
+Supported operations:
+
+* Add items to cart
+* Update cart quantities
+* Remove items from cart
+* Automatic total calculation
+
+Each cart is linked to the **authenticated user session**.
 
 ---
 
 ## 📑 Order Management
-- Checkout converts cart to order
-- Order history tracking
-- Order status updates
+
+Handles the order lifecycle from checkout to tracking.
+
+Features include:
+
+* Place orders
+* Track order history
+* View order details
+* Manage order statuses
+
+Orders are generated from cart items and stored using **relational database mapping**.
 
 ---
 
 ## 📉 Inventory Management
-- Automatic stock deduction on successful checkout
-- Prevents ordering out-of-stock products
+
+Maintains accurate stock levels for all products.
+
+When an order is placed:
+
+* Product stock is automatically reduced
+* Inventory consistency is maintained
+* Overselling is prevented
 
 ---
 
-## 💳 Payment Simulation
-- Simulated payment gateway
-- Order status updated after payment
+## 💳 Payment Processing
+
+A **simulated payment gateway** is implemented to demonstrate checkout flow.
+
+Workflow:
+
+1. User initiates checkout
+2. Payment is processed (simulation)
+3. Order is created
+4. Inventory is updated
+
+This structure allows future integration with real payment gateways like:
+
+* Stripe
+* Razorpay
+* PayPal
 
 ---
 
-# 🏗️ Tech Stack
+## 📧 Email Notification Service
 
-| Layer | Technology |
-|------|-------------|
-| Language | Java 21 |
-| Framework | Spring Boot 3 |
-| Security | Spring Security + JWT |
-| Database | MySQL |
-| ORM | Spring Data JPA / Hibernate |
-| API Documentation | Swagger (OpenAPI 3) |
-| Object Mapping | ModelMapper |
-| Testing | JUnit + Mockito |
-| Containerization | Docker |
-| Deployment | Render |
-| Cloud Database | Aiven MySQL |
+The application includes an **email notification system** to improve communication with users.
 
----
+Automated emails are triggered for important events such as:
 
-# 🧱 Project Architecture
+* User registration confirmation
+* Order placement confirmation
+* Payment confirmation
+* Order status updates
 
-```
-controller  → REST API endpoints
-service     → Business logic
-repository  → Database access layer
-entity      → Database models
-dto         → Request/response models
-config      → Security & application configuration
-exception   → Global exception handling
-```
+The email service is implemented using **Spring Boot Mail (JavaMailSender)** and runs asynchronously to ensure it **does not affect API response time**.
 
-This layered architecture ensures:
+Benefits include:
 
-- Separation of concerns
-- Maintainable codebase
-- Scalability for production systems
+* Improved user experience
+* Real-time transaction notifications
+* Better communication between the platform and customers
 
 ---
 
-# 🗄 Database Schema
+# 🏗️ Technology Stack
 
-Below is the relational schema used in this project.
+| Layer             | Technology                  |
+| ----------------- | --------------------------- |
+| Language          | Java 21                     |
+| Framework         | Spring Boot 3               |
+| Build Tool        | Maven                       |
+| Database          | MySQL                       |
+| ORM               | Spring Data JPA / Hibernate |
+| Security          | Spring Security + JWT       |
+| API Documentation | Swagger (OpenAPI 3)         |
+| Email Service     | Spring Boot Mail (JavaMailSender) |
+| Object Mapping    | ModelMapper                 |
+| Testing           | JUnit                       |
+| Code Coverage     | JaCoCo                      |
+| Containerization  | Docker                      |
+| Cloud Hosting     | Render                      |
 
-![Database Schema](docs/images/er-diagram.png)
+---
 
-### Key Relationships
+# 📂 Project Architecture
+
+The project follows a **layered architecture pattern**.
 
 ```
-users      ──< orders
-users      ──  carts
-carts      ──< cart_items
-products   ──< cart_items
-orders     ──< order_items
-products   ──< order_items
+controller  → Handles incoming HTTP requests
+service     → Contains business logic
+repository  → Handles database interaction
+entity      → JPA entity models
+dto         → Request & response objects
+security    → JWT authentication filters
+config      → Spring configuration
+email       → Email notification service
 ```
+
+### Architectural Benefits
+
+* Clear separation of concerns
+* Easy debugging and maintenance
+* Improved scalability
+* Clean code structure
+
+---
+
+# 📁 Project Structure
+
+```
+src/main/java
+│
+├── controller
+│   └── REST API endpoints
+│
+├── service
+│   └── Business logic layer
+│
+├── repository
+│   └── Database access layer
+│
+├── entity
+│   └── JPA entity models
+│
+├── dto
+│   └── Request / response objects
+│
+├── security
+│   └── JWT authentication filters
+│
+├── email
+│   └── Email notification service
+│
+└── config
+    └── Application configuration
+```
+
+---
+
+# 🗄️ Database Design (ER Diagram)
+
+The system uses a relational schema connecting key entities:
+
+* Users
+* Products
+* Cart
+* Orders
+* Order Items
+* Cart Items
+
+<p align="center">
+  <img src="docs/images/er-diagram.png" width="800"/>
+</p>
 
 ---
 
 # 🧪 Test Coverage (JaCoCo)
 
-Unit tests were implemented for **service and controller layers**.
+Unit tests are implemented to ensure reliability of the core business logic.
 
-Coverage report generated using **JaCoCo**.
+JaCoCo is integrated to generate **code coverage reports**.
 
-![JaCoCo Coverage](docs/images/jacoco-report.png)
+<p align="center">
+  <img src="docs/images/jacoco-report.png" width="800"/>
+</p>
 
-Coverage Highlights:
+Benefits of JaCoCo:
 
-- **Instruction Coverage:** ~86%
-- **Branch Coverage:** ~61%
-- **Controller Layer:** ~90%
-- **Service Layer:** ~85%
+* Identify untested code
+* Improve reliability
+* Maintain high code quality
+
+---
+
+# 📚 API Documentation
+
+Swagger is integrated for API testing and documentation.
+
+### Access Swagger
+
+```
+https://ecommerce-backend-2-tu2o.onrender.com/swagger-ui/index.html
+```
+
+Swagger allows developers to:
+
+* Explore REST endpoints
+* Send API requests
+* Authenticate using JWT
+* Test responses interactively
 
 ---
 
 # 🔐 Authentication Flow
 
-1. Login using:
+Authentication uses **JWT (JSON Web Tokens)**.
+
+### Login Request
 
 ```
 POST /api/users/login
 ```
 
-2. Copy returned JWT token
+### Authentication Steps
 
-3. Click **Authorize 🔒** in Swagger
+1. User sends login credentials
+2. Server validates credentials
+3. JWT token is generated
+4. Token is returned in response
+5. Client includes token in subsequent requests
 
-4. Paste token:
+Example header:
 
 ```
-Bearer <your_token>
+Authorization: Bearer <token>
 ```
+
+Spring Security validates the token before granting access.
 
 ---
 
-# 🐳 Running with Docker
+# ☁️ Deployment (Render)
+
+The application is deployed using **Render cloud platform**.
+
+Deployment pipeline:
+
+```
+GitHub Repository
+        ↓
+Render Build
+        ↓
+Spring Boot Application
+        ↓
+Public API Endpoint
+```
+
+Render automatically:
+
+* Pulls code from GitHub
+* Builds the application
+* Deploys the container
+* Provides a public URL
+
+---
+
+# ⚙️ Environment Variables (Production)
+
+In Render, the following environment variables are configured:
+
+```
+SPRING_DATASOURCE_URL
+SPRING_DATASOURCE_USERNAME
+SPRING_DATASOURCE_PASSWORD
+JWT_SECRET
+MAIL_USERNAME
+MAIL_PASSWORD
+```
+
+These variables allow the application to connect to the **cloud database and email service securely**.
+
+---
+
+# 🛠️ Running Locally (Development)
+
+You can also run the project locally for development.
 
 ### Prerequisites
 
-- Docker Desktop
-- Docker Compose
-
----
-
-### Configure Environment Variables
-
-Create a `.env` file in the project root:
-
-```
-SPRING_DATASOURCE_URL=jdbc:mysql://<HOST>:<PORT>/<DATABASE>?sslMode=REQUIRED
-SPRING_DATASOURCE_USERNAME=<USERNAME>
-SPRING_DATASOURCE_PASSWORD=<PASSWORD>
-```
-
----
-
-### Start the Application
-
-```
-docker compose up --build
-```
-
----
-
-### Stop Containers
-
-```
-docker compose down
-```
-
-To reset volumes:
-
-```
-docker compose down -v
-```
-
----
-
-# 🛠 Running Locally (Optional)
-
-### Prerequisites
-
-- Java 21
-- Maven 3.8+
-- MySQL
-
----
-
-### Create Database
-
-```sql
-CREATE DATABASE ecommerce_db;
-```
-
----
-
-### Configure application.properties
-
-```
-spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce_db
-spring.datasource.username=<username>
-spring.datasource.password=<password>
-```
-
----
+* Java 21+
+* Maven
+* MySQL
 
 ### Run Application
 
@@ -241,7 +373,7 @@ spring.datasource.password=<password>
 ./mvnw spring-boot:run
 ```
 
-Application starts at
+Application will start at:
 
 ```
 http://localhost:8080
@@ -249,32 +381,42 @@ http://localhost:8080
 
 ---
 
-# 📦 Project Deliverables
+# 📦 Repository Contents
 
-This repository contains:
+This repository includes:
 
-- Spring Boot backend source code
-- Docker configuration
-- Postman API collection
-- Database schema
-- API documentation via Swagger
-
----
-
-# 🎯 Key Backend Concepts Demonstrated
-
-- JWT Authentication
-- Role-based authorization
-- Layered architecture
-- RESTful API design
-- Dockerized deployment
-- Cloud database integration
-- API documentation with Swagger
-- Unit testing with JaCoCo coverage
+* Complete **Spring Boot Backend Source Code**
+* Swagger API Documentation
+* Database schema
+* Docker configuration
+* Postman API collection
+* ER Diagram
+* JaCoCo coverage report
+* Email notification service
 
 ---
 
-# 👨‍💻 Author
+# 🎯 Key Learning Outcomes
 
-**Sudeep Kumar Dehury**  
-B.Tech Computer Science Engineering
+This project demonstrates:
+
+* Designing **scalable REST APIs**
+* Implementing **JWT authentication**
+* Building **secure Spring Boot applications**
+* Integrating **email notification services**
+* Managing relational databases using **JPA**
+* Deploying backend services on **cloud platforms**
+* Monitoring code quality with **JaCoCo coverage**
+
+---
+
+# 🚀 Future Improvements
+
+Possible enhancements:
+
+* Real payment gateway integration
+* Redis caching for performance
+* API rate limiting
+* Microservices architecture
+* CI/CD pipeline automation
+* Kubernetes deployment
