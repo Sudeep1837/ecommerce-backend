@@ -214,6 +214,7 @@ The system uses a relational schema connecting key entities:
 * Cart
 * Orders
 * Order Items
+* Cart Items
 
 <p align="center">
   <img src="docs/images/er-diagram.png" width="800"/>
