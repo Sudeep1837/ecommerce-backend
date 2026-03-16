@@ -1,280 +1,203 @@
 # 🛒 E-Commerce Backend System
 
-A **production-grade scalable REST API backend** for an e-commerce platform built using **Java 21, Spring Boot 3, and MySQL**.
+A scalable and production-ready **backend system for an e-commerce platform** built using **Java 21, Spring Boot 3, and MySQL**.
 
-The system is designed using **industry-standard backend architecture**, secure authentication, and cloud deployment.
+The system follows modern backend engineering practices including:
 
-It exposes REST APIs that can be consumed by **web, mobile, or frontend applications**.
+* **Layered Architecture**
+* **RESTful API Design**
+* **JWT-based Authentication**
+* **Secure Role-Based Authorization**
+* **Cloud Deployment**
+* **Dockerized Environment**
+* **Automated Test Coverage using JaCoCo**
+
+This project demonstrates how a **real-world e-commerce backend system** can be designed, implemented, and deployed using modern backend technologies.
 
 ---
 
-# 🌐 Live API Documentation
+# 🌍 Live Deployment
 
-The backend is deployed on **Render**.
+The backend is **deployed on Render** and accessible publicly.
 
-👉 Swagger UI  
+### 🔗 Live API Documentation
+
 https://ecommerce-backend-2-tu2o.onrender.com/swagger-ui/index.html
 
-Swagger allows you to:
+Using Swagger you can:
 
-- Explore all APIs
-- Test endpoints directly
-- Authenticate using JWT tokens
+* Explore all REST APIs
+* Send requests directly from the browser
+* Authenticate using JWT tokens
+* Test API responses
 
 ---
 
 # 🚀 Core Features
 
 ## 👤 User Management
-- User Registration
-- Login using **JWT Authentication**
-- Profile update
-- Role based access (**ADMIN / CUSTOMER**)
-- Admin can manage users
+
+Handles authentication and user administration.
+
+Capabilities include:
+
+* User registration
+* Secure login using **JWT authentication**
+* Role-based access control (**ADMIN / CUSTOMER**)
+* Profile management
+* Admin control over platform users
+
+### Security Implementation
+
+* Password encryption using **BCrypt**
+* Stateless authentication using **JWT tokens**
+* Endpoint protection using **Spring Security filters**
+* Secure request validation
 
 ---
 
 ## 📦 Product Management
-- Admin can **add, update, delete products**
-- Public product browsing
-- Pagination support
-- Category filtering
+
+Allows administrators to manage products and customers to browse available items.
+
+Features include:
+
+* Add new products
+* Update product details
+* Delete products
+* View product catalog
+* Pagination support
+* Filtering support
+
+This module enables **efficient product management for scalable e-commerce systems.**
 
 ---
 
 ## 🛒 Cart Management
-- Add products to cart
-- Update quantity
-- Remove items
-- Automatic cart total calculation
+
+The cart module enables customers to manage products before checkout.
+
+Supported operations:
+
+* Add items to cart
+* Update cart quantities
+* Remove items from cart
+* Automatic total calculation
+
+Each cart is linked to the **authenticated user session**.
 
 ---
 
 ## 📑 Order Management
-- Checkout converts cart to order
-- Order history tracking
-- Order status updates
+
+Handles the order lifecycle from checkout to tracking.
+
+Features include:
+
+* Place orders
+* Track order history
+* View order details
+* Manage order statuses
+
+Orders are generated from cart items and stored using **relational database mapping**.
 
 ---
 
 ## 📉 Inventory Management
-- Automatic stock deduction on successful checkout
-- Prevents ordering out-of-stock products
+
+Maintains accurate stock levels for all products.
+
+When an order is placed:
+
+* Product stock is automatically reduced
+* Inventory consistency is maintained
+* Overselling is prevented
 
 ---
 
-## 💳 Payment Simulation
-- Simulated payment gateway
-- Order status updated after payment
+## 💳 Payment Processing
+
+A **simulated payment gateway** is implemented to demonstrate checkout flow.
+
+Workflow:
+
+1. User initiates checkout
+2. Payment is processed (simulation)
+3. Order is created
+4. Inventory is updated
+
+This structure allows future integration with real payment gateways like:
+
+* Stripe
+* Razorpay
+* PayPal
 
 ---
 
-# 🏗️ Tech Stack
+# 🏗️ Technology Stack
 
-| Layer | Technology |
-|------|-------------|
-| Language | Java 21 |
-| Framework | Spring Boot 3 |
-| Security | Spring Security + JWT |
-| Database | MySQL |
-| ORM | Spring Data JPA / Hibernate |
-| API Documentation | Swagger (OpenAPI 3) |
-| Object Mapping | ModelMapper |
-| Testing | JUnit + Mockito |
-| Containerization | Docker |
-| Deployment | Render |
-| Cloud Database | Aiven MySQL |
-
----
-
-# 🧱 Project Architecture
-
-```
-controller  → REST API endpoints
-service     → Business logic
-repository  → Database access layer
-entity      → Database models
-dto         → Request/response models
-config      → Security & application configuration
-exception   → Global exception handling
-```
-
-This layered architecture ensures:
-
-- Separation of concerns
-- Maintainable codebase
-- Scalability for production systems
+| Layer             | Technology                  |
+| ----------------- | --------------------------- |
+| Language          | Java 21                     |
+| Framework         | Spring Boot 3               |
+| Build Tool        | Maven                       |
+| Database          | MySQL                       |
+| ORM               | Spring Data JPA / Hibernate |
+| Security          | Spring Security + JWT       |
+| API Documentation | Swagger (OpenAPI 3)         |
+| Object Mapping    | ModelMapper                 |
+| Testing           | JUnit                       |
+| Code Coverage     | JaCoCo                      |
+| Containerization  | Docker                      |
+| Cloud Hosting     | Render                      |
 
 ---
 
-# 🗄 Database Schema
+# 📂 Project Architecture
 
-Below is the relational schema used in this project.
-
-![Database Schema](docs/images/er-diagram.png)
-
-### Key Relationships
+The project follows a **layered architecture pattern**.
 
 ```
-users      ──< orders
-users      ──  carts
-carts      ──< cart_items
-products   ──< cart_items
-orders     ──< order_items
-products   ──< order_items
+controller  → Handles incoming HTTP requests
+service     → Contains business logic
+repository  → Handles database interaction
+entity      → JPA entity models
+dto         → Request & response objects
+security    → JWT authentication filters
+config      → Spring configuration
 ```
+
+### Architectural Benefits
+
+* Clear separation of concerns
+* Easy debugging and maintenance
+* Improved scalability
+* Clean code structure
 
 ---
 
-# 🧪 Test Coverage (JaCoCo)
-
-Unit tests were implemented for **service and controller layers**.
-
-Coverage report generated using **JaCoCo**.
-
-![JaCoCo Coverage](docs/images/jacoco-report.png)
-
-Coverage Highlights:
-
-- **Instruction Coverage:** ~86%
-- **Branch Coverage:** ~61%
-- **Controller Layer:** ~90%
-- **Service Layer:** ~85%
-
----
-
-# 🔐 Authentication Flow
-
-1. Login using:
+# 📁 Project Structure
 
 ```
-POST /api/users/login
+src/main/java
+│
+├── controller
+│   └── REST API endpoints
+│
+├── service
+│   └── Business logic layer
+│
+├── repository
+│   └── Database access layer
+│
+├── entity
+│   └── JPA entity models
+│
+├── dto
+│   └── Request / response objects
+│
+├── security
+│   └── JWT authentication filters
+│
+└
 ```
-
-2. Copy returned JWT token
-
-3. Click **Authorize 🔒** in Swagger
-
-4. Paste token:
-
-```
-Bearer <your_token>
-```
-
----
-
-# 🐳 Running with Docker
-
-### Prerequisites
-
-- Docker Desktop
-- Docker Compose
-
----
-
-### Configure Environment Variables
-
-Create a `.env` file in the project root:
-
-```
-SPRING_DATASOURCE_URL=jdbc:mysql://<HOST>:<PORT>/<DATABASE>?sslMode=REQUIRED
-SPRING_DATASOURCE_USERNAME=<USERNAME>
-SPRING_DATASOURCE_PASSWORD=<PASSWORD>
-```
-
----
-
-### Start the Application
-
-```
-docker compose up --build
-```
-
----
-
-### Stop Containers
-
-```
-docker compose down
-```
-
-To reset volumes:
-
-```
-docker compose down -v
-```
-
----
-
-# 🛠 Running Locally (Optional)
-
-### Prerequisites
-
-- Java 21
-- Maven 3.8+
-- MySQL
-
----
-
-### Create Database
-
-```sql
-CREATE DATABASE ecommerce_db;
-```
-
----
-
-### Configure application.properties
-
-```
-spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce_db
-spring.datasource.username=<username>
-spring.datasource.password=<password>
-```
-
----
-
-### Run Application
-
-```
-./mvnw clean install
-./mvnw spring-boot:run
-```
-
-Application starts at
-
-```
-http://localhost:8080
-```
-
----
-
-# 📦 Project Deliverables
-
-This repository contains:
-
-- Spring Boot backend source code
-- Docker configuration
-- Postman API collection
-- Database schema
-- API documentation via Swagger
-
----
-
-# 🎯 Key Backend Concepts Demonstrated
-
-- JWT Authentication
-- Role-based authorization
-- Layered architecture
-- RESTful API design
-- Dockerized deployment
-- Cloud database integration
-- API documentation with Swagger
-- Unit testing with JaCoCo coverage
-
----
-
-# 👨‍💻 Author
-
-**Sudeep Kumar Dehury**  
-B.Tech Computer Science Engineering
