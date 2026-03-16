@@ -1,63 +1,88 @@
 # 🛒 E-Commerce Backend System
 
-A **production-grade scalable backend system** for an e-commerce platform built using **Java 21, Spring Boot 3, and MySQL**.
+A **production-grade scalable REST API backend** for an e-commerce platform built using **Java 21, Spring Boot 3, and MySQL**.
 
-This project demonstrates **professional backend development practices** including:
+The system is designed using **industry-standard backend architecture**, secure authentication, and cloud deployment.
 
-- Layered Architecture
-- Secure Authentication using JWT
-- RESTful API Design
-- API Documentation using Swagger
-- Containerized Deployment with Docker
-- Cloud Database Integration (Aiven MySQL)
+It exposes REST APIs that can be consumed by **web, mobile, or frontend applications**.
 
 ---
 
-# 🚀 Features
+# 🌐 Live API Documentation
 
-### 👤 User Management
+The backend is deployed on **Render**.
+
+👉 Swagger UI  
+https://ecommerce-backend-2-tu2o.onrender.com/swagger-ui/index.html
+
+Swagger allows you to:
+
+- Explore all APIs
+- Test endpoints directly
+- Authenticate using JWT tokens
+
+---
+
+# 🚀 Core Features
+
+## 👤 User Management
 - User Registration
-- Secure Login using **JWT Authentication**
-- Profile update functionality
-- Role-based access (**ADMIN / CUSTOMER**)
+- Login using **JWT Authentication**
+- Profile update
+- Role based access (**ADMIN / CUSTOMER**)
 - Admin can manage users
 
-### 📦 Product Management
-- Create, update, and delete products (Admin)
-- Product listing with filtering
-- Pagination support
+---
 
-### 🛒 Cart Management
-- Add items to cart
-- Update item quantity
-- Remove items from cart
+## 📦 Product Management
+- Admin can **add, update, delete products**
+- Public product browsing
+- Pagination support
+- Category filtering
+
+---
+
+## 🛒 Cart Management
+- Add products to cart
+- Update quantity
+- Remove items
 - Automatic cart total calculation
 
-### 📑 Order Management
-- Checkout workflow
+---
+
+## 📑 Order Management
+- Checkout converts cart to order
 - Order history tracking
 - Order status updates
 
-### 📉 Inventory Management
-- Automatic stock deduction after successful checkout
+---
 
-### 💳 Payment Management
-- Simulated payment gateway processing
+## 📉 Inventory Management
+- Automatic stock deduction on successful checkout
+- Prevents ordering out-of-stock products
 
 ---
 
-# 🏗️ Technical Stack
+## 💳 Payment Simulation
+- Simulated payment gateway
+- Order status updated after payment
+
+---
+
+# 🏗️ Tech Stack
 
 | Layer | Technology |
 |------|-------------|
 | Language | Java 21 |
-| Framework | Spring Boot 3+ |
+| Framework | Spring Boot 3 |
+| Security | Spring Security + JWT |
 | Database | MySQL |
 | ORM | Spring Data JPA / Hibernate |
-| Security | Spring Security + JWT |
-| Documentation | Swagger UI (OpenAPI 3) |
-| Mapping | ModelMapper |
-| Deployment | Docker + Render |
+| API Documentation | Swagger (OpenAPI 3) |
+| Object Mapping | ModelMapper |
+| Testing | JUnit + Mockito |
+| Containerization | Docker |
+| Deployment | Render |
 | Cloud Database | Aiven MySQL |
 
 ---
@@ -66,103 +91,74 @@ This project demonstrates **professional backend development practices** includi
 
 ```
 controller  → REST API endpoints
-service     → Business logic layer
-repository  → Data access layer
+service     → Business logic
+repository  → Database access layer
 entity      → Database models
-dto         → Request / Response models
+dto         → Request/response models
 config      → Security & application configuration
+exception   → Global exception handling
 ```
 
-This **layered architecture ensures scalability, maintainability, and separation of concerns.**
+This layered architecture ensures:
+
+- Separation of concerns
+- Maintainable codebase
+- Scalability for production systems
 
 ---
 
-# 🌐 Live API Documentation
+# 🗄 Database Schema
 
-The application is deployed on **Render**.
+Below is the relational schema used in this project.
 
-You can access the **Swagger UI** here:
+![Database Schema](docs/images/er-diagram.png)
 
-👉 **https://ecommerce-backend-2-tu2o.onrender.com/swagger-ui/index.html**
+### Key Relationships
 
-Swagger allows you to:
-
-- Explore all available APIs
-- Test endpoints directly from the browser
-- Authenticate using JWT tokens
+```
+users      ──< orders
+users      ──  carts
+carts      ──< cart_items
+products   ──< cart_items
+orders     ──< order_items
+products   ──< order_items
+```
 
 ---
 
-# 🔐 Authentication (Using Swagger)
+# 🧪 Test Coverage (JaCoCo)
 
-1. Register or login using the endpoint:
+Unit tests were implemented for **service and controller layers**.
+
+Coverage report generated using **JaCoCo**.
+
+![JaCoCo Coverage](docs/images/jacoco-report.png)
+
+Coverage Highlights:
+
+- **Instruction Coverage:** ~86%
+- **Branch Coverage:** ~61%
+- **Controller Layer:** ~90%
+- **Service Layer:** ~85%
+
+---
+
+# 🔐 Authentication Flow
+
+1. Login using:
 
 ```
 POST /api/users/login
 ```
 
-2. Copy the returned **JWT token**
+2. Copy returned JWT token
 
-3. Click the **Authorize** button in Swagger
+3. Click **Authorize 🔒** in Swagger
 
-4. Paste the token like this:
+4. Paste token:
 
 ```
 Bearer <your_token>
-```
-
----
-
-# 🛠️ Running Locally (Optional)
-
-### 1️⃣ Prerequisites
-
-Make sure the following are installed:
-
-- Java 21+
-- Maven 3.8+
-- MySQL Server
-
----
-
-### 2️⃣ Database Setup
-
-Create the database:
-
-```sql
-CREATE DATABASE IF NOT EXISTS ecommerce_db;
-```
-
-Then run the provided:
-
-```
-schema.sql
-```
-
----
-
-### 3️⃣ Update Database Credentials
-
-Update `application.properties` if your MySQL credentials differ.
-
-```
-spring.datasource.username=YOUR_USERNAME
-spring.datasource.password=YOUR_PASSWORD
-```
-
----
-
-### 4️⃣ Build and Run
-
-```
-./mvnw clean install
-./mvnw spring-boot:run
-```
-
-The application will start on:
-
-```
-http://localhost:8080
 ```
 
 ---
@@ -176,16 +172,14 @@ http://localhost:8080
 
 ---
 
-### Configure Aiven MySQL
+### Configure Environment Variables
 
-Create a `.env` file in the project root.
-
-Example:
+Create a `.env` file in the project root:
 
 ```
-SPRING_DATASOURCE_URL=jdbc:mysql://<AIVEN_HOST>:<PORT>/<DB_NAME>?ssl-mode=REQUIRED
-SPRING_DATASOURCE_USERNAME=<AIVEN_USER>
-SPRING_DATASOURCE_PASSWORD=<AIVEN_PASSWORD>
+SPRING_DATASOURCE_URL=jdbc:mysql://<HOST>:<PORT>/<DATABASE>?sslMode=REQUIRED
+SPRING_DATASOURCE_USERNAME=<USERNAME>
+SPRING_DATASOURCE_PASSWORD=<PASSWORD>
 ```
 
 ---
@@ -196,20 +190,61 @@ SPRING_DATASOURCE_PASSWORD=<AIVEN_PASSWORD>
 docker compose up --build
 ```
 
-This will start the backend container connected to **Aiven MySQL**.
-
 ---
 
-### Stop the Application
+### Stop Containers
 
 ```
 docker compose down
 ```
 
-To fully reset containers and volumes:
+To reset volumes:
 
 ```
 docker compose down -v
+```
+
+---
+
+# 🛠 Running Locally (Optional)
+
+### Prerequisites
+
+- Java 21
+- Maven 3.8+
+- MySQL
+
+---
+
+### Create Database
+
+```sql
+CREATE DATABASE ecommerce_db;
+```
+
+---
+
+### Configure application.properties
+
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce_db
+spring.datasource.username=<username>
+spring.datasource.password=<password>
+```
+
+---
+
+### Run Application
+
+```
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+Application starts at
+
+```
+http://localhost:8080
 ```
 
 ---
@@ -218,23 +253,24 @@ docker compose down -v
 
 This repository contains:
 
-- Complete **Spring Boot Backend Source Code**
-- `README.md` – Project documentation
-- `Postman_Collection.json` – API testing collection
-- `schema.sql` – Database schema
-- `docker-compose.yml` – Containerized deployment
+- Spring Boot backend source code
+- Docker configuration
+- Postman API collection
+- Database schema
+- API documentation via Swagger
 
 ---
 
-# 🎯 Key Learning Outcomes
+# 🎯 Key Backend Concepts Demonstrated
 
-This project demonstrates:
-
-- Production-ready **Spring Boot backend architecture**
-- **JWT authentication and role-based security**
-- **Cloud database integration (Aiven MySQL)**
-- **Dockerized backend deployment**
-- REST API documentation using **Swagger**
+- JWT Authentication
+- Role-based authorization
+- Layered architecture
+- RESTful API design
+- Dockerized deployment
+- Cloud database integration
+- API documentation with Swagger
+- Unit testing with JaCoCo coverage
 
 ---
 
